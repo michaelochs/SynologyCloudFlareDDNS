@@ -13,10 +13,11 @@ $fullname = (string)$argv[3];
 $ip = (string)$argv[4];
 
 // check if the hostname is a wildcard or contains '.'
-if ($hostname == "wildcard") {
-    $hostname = "*";
+$wildcard_prefix = "wildcard.";
+if (str_starts_with($hostname, $wildcard_prefix)) {
+    $hostname = "*." + substr($hostname, strlen($wildcard_prefix));
 }
-elseif (strpos($hostname, '.') === false) {
+if (strpos($hostname, '.') === false) {
     echo "badparam";
     exit();
 }
