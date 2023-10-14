@@ -15,7 +15,8 @@ $ip = (string)$argv[4];
 // check if the hostname is a wildcard or contains '.'
 $wildcard_prefix = "wildcard.";
 if (str_starts_with($hostname, $wildcard_prefix)) {
-    $hostname = "*." + substr($hostname, strlen($wildcard_prefix));
+	$hostname = substr($hostname, strlen($wildcard_prefix));
+	$fullname = "*." . $hostname;
 }
 if (strpos($hostname, '.') === false) {
     echo "badparam";
@@ -81,8 +82,8 @@ if (empty($data = exec_curl($options))) {
     exit();
 }
 
-$result = array_filter(array_get($data, 'result', []), function($row) use ($hostname) {
-    return $row['name'] === $hostname;
+$result = array_filter(array_get($data, 'result', []), function($row) use ($fullname) {
+    return $row['name'] === $fullname;
 });
 
 if(empty($record_info = array_pop($result))) {
